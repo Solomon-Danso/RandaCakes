@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Skip rewrites for full URLs (with http or https)
+  RewriteCond %{HTTP_HOST} !^motors\.hydottech\.com$ [NC]
+  RewriteRule ^(https?:)//(.*)$ $1//$2 [L,R=301]
+  
+  # Existing rewrite rules
+  RewriteRule ^([^/]+)/$ $1.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^([^/]+)/$ $1.html
+  RewriteRule ^([^/]+)/([^/]+)/$ /$1/$2.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !(\.[a-zA-Z0-9]{1,5}|/)$
+  RewriteRule (.*)$ /$1/ [R=301,L]
+</IfModule>
