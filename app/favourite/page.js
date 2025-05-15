@@ -60,8 +60,8 @@ const { loadCart,saveCart,addToCartWithSize,addToCart,deleteFromCart,updateCartQ
 <div className='profile-left-1'>
 <div style={{width:"120px", height:"120px", borderRadius:"50%", backgroundColor:"#EC407A", color:"white", textAlign:"center", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", fontSize:"50px", fontWeight:"bold"}}>S</div>
 <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
-    <div style={{fontSize:"1.3rem", fontWeight:"bold"}}>Solomon Danso</div>
-    <div>solomondanso2023@gmail.com</div>
+    <div style={{fontSize:"1.3rem", fontWeight:"bold"}}>Randa Cakes</div>
+    <div>randacakes@gmail.com</div>
 </div>
 
 </div>
@@ -106,7 +106,7 @@ const { loadCart,saveCart,addToCartWithSize,addToCart,deleteFromCart,updateCartQ
              
             }}>
             <div style={{display:"flex", flexDirection:"row", gap:"1rem", alignItems:"center"}}>
-            <img src={ apiMedia+item.mainPicture} alt="Product" style={{width:"150px", height:"150px"}} />
+            <img src={ item.mainPicture} alt="Product" style={{width:"150px", height:"150px"}} />
 
             <div style={{display:"flex", flexDirection:"column", gap:"0.5rem"}}>
                 <div style={{fontSize:"0.8rem"}}>{item.category}</div>

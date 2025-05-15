@@ -8,14 +8,14 @@ const Footer = () => {
     
     <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
         <div className="title">Contact us</div>
-        <div>UG-Mall - Mega Super Store</div>
+        <div>Ran</div>
         <div>507-Union Trade Centre Accra</div>
         <div style={{fontSize:"1.5rem", color:"#FF5252"}}>0599626272</div>
     </div>
 
     {/* <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
         <div className="title">Our company</div>
-        <div>UG MALL, an authorized online marketplace, offers a comprehensive platform for businesses across Ghana to buy and sell a diverse range of goods and services. This digital hub aims to streamline commercial transactions, providing a convenient and reliable space for businesses to connect and trade.</div>
+        <div>Randa Cakes, an authorized online marketplace, offers a comprehensive platform for businesses across Ghana to buy and sell a diverse range of goods and services. This digital hub aims to streamline commercial transactions, providing a convenient and reliable space for businesses to connect and trade.</div>
        
     </div> */}
 

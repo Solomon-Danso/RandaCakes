@@ -179,7 +179,7 @@ const ProductCard = ({ product }) => {
             <div className='product-card' key={index}>
               <div className='image-container'>
                 <img
-                  src={apiMedia+currentImage}
+                  src={currentImage}
                   alt={item.title}
                   className='product-image'
                   onMouseEnter={() => handleMouseEnter(index, item.secondPicture)}
@@ -191,24 +191,7 @@ const ProductCard = ({ product }) => {
                 
                 <div className='discount-badge'>-{item.discountPercent}%</div>
 
-                <div className='image-icons'>
-                  <CgMaximizeAlt
-                    className='p-icon'
-                    style={{ width: "30px", height: "30px", cursor: "pointer" }}
-                    onClick={() => {
-                      handleInteractions("localhost2",item.productId,item.category )
-                      openModal(item)}}
-                  />
-                  {wishlist.find(cartItem => cartItem.productId === item.productId)?
-                  <FaHeart className='p-icon' style={{ width: "30px", height: "30px", color:"red" }} onClick={() => deleteFromWishlist(item.productId)}/>:
-                  <FiHeart className='p-icon' style={{ width: "30px", height: "30px" }} onClick={() => {
-                    handleInteractions("localhost2",item.productId,item.category )
-                    addToWishList(item, 1)}}/>
-                  
-                  }
-
-                  <PiRepeatOnceBold className='p-icon' style={{ width: "30px", height: "30px" }} />
-                </div>
+               
               </div>
 
               <div className='product-info'>
@@ -278,7 +261,7 @@ const ProductCard = ({ product }) => {
               {(modalContent.subPictures || []).map((subImage, subIndex) => (
                 <img
                   key={subIndex}
-                  src={apiMedia+subImage}
+                  src={subImage}
                   alt={`Sub ${subIndex}`}
                   className="sub-image-item"
                   onMouseEnter={() => setActiveImage(subImage)}
@@ -289,7 +272,7 @@ const ProductCard = ({ product }) => {
 
               <div className="magnifier-container">
                 <img
-                  src={apiMedia+activeImage}
+                  src={activeImage}
                   alt="Main"
                   className="modal-image"
                   ref={mainImageRef}

@@ -21,43 +21,46 @@ export const useCartStore = create((set, get) => ({
   productList: [],
   categoryList:[],
 
-  loadCategory: async () => {
-    try {
-      const response = await fetch(apiServer + "ViewAllCategory", {
-        method: "POST"
-      });
+  // loadCategory: async () => {
+  //   try {
+  //     const response = await fetch(apiServer + "ViewAllCategory", {
+  //       method: "POST"
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (response.ok) {
-        set({ categoryList: data });
+  //     if (response.ok) {
+  //       set({ categoryList: data });
        
         
-      } else {
-        console.error("Invalid product response format", data);
-      }
-    } catch (error) {
-      console.error("Error loading products:", error);
-    }
-  },
+  //     } else {
+  //       console.error("Invalid product response format", data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error loading products:", error);
+  //   }
+  // },
 
-  loadProducts: async () => {
-    try {
-      const response = await fetch(apiServer + "ViewAllProducts", {
-        method: "POST"
-      });
+loadCategory: async () => {},
+loadProducts: async () => {},
 
-      const data = await response.json();
+  // loadProducts: async () => {
+  //   try {
+  //     const response = await fetch(apiServer + "ViewAllProducts", {
+  //       method: "POST"
+  //     });
 
-      if (Array.isArray(data)) {
-        set({ productList: data });
-      } else {
-        console.error("Invalid product response format", data);
-      }
-    } catch (error) {
-      console.error("Error loading products:", error);
-    }
-  },
+  //     const data = await response.json();
+
+  //     if (Array.isArray(data)) {
+  //       set({ productList: data });
+  //     } else {
+  //       console.error("Invalid product response format", data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error loading products:", error);
+  //   }
+  // },
   
   setSearchTerm: (term) => {
     set({ searchTerm: term });

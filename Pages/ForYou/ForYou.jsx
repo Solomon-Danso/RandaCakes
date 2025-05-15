@@ -151,33 +151,11 @@ const ForYou = () => {
           </div>
 
           {/* RATING FILTER */}
-          <div className="cateProducts-Category">
-            <div className="header">Filter By Rating</div>
-            {[5, 4, 3, 2, 1].map((rating) => (
-              <div key={rating} className="filter-category-item">
-                <input type="checkbox" checked={!!checkedRatings[rating]} onChange={() => handleRatingChange(rating)} />
-                <span>{renderStars(rating)}</span>
-              </div>
-            ))}
-          </div>
+         
         </div>
 
         <div className="cateProducts-Right">
-          <div className='sortController'>
-            <div>
-              {filteredProducts.length} {filteredProducts.length === 1 ? "Product" : "Products"} Found
-            </div>
-            <div style={{display:"flex", flexDirection:"row", alignItems:"center", gap:"0.5rem"}}>
-              <span>Sort By</span>
-              <select className="sort-select" onChange={handleSortChange} value={sortOption}>
-                <option value="">Default</option>
-                <option value="priceLowHigh">Price: Low to High</option>
-                <option value="priceHighLow">Price: High to Low</option>
-                <option value="ratingHighLow">Rating: High to Low</option>
-                <option value="ratingLowHigh">Rating: Low to High</option>
-              </select>
-            </div>
-          </div>
+          
 
           <RowProduct product={filteredProducts} />
         </div>
@@ -208,13 +186,7 @@ const ForYou = () => {
                   <span>Max: GHC{maxPrice.toFixed(2)}</span>
                 </div>
 
-                <div className="header">Filter By Rating</div>
-                {[5, 4, 3, 2, 1].map((rating) => (
-                  <div key={rating} className="filter-category-item">
-                    <input type="checkbox" checked={!!checkedRatings[rating]} onChange={() => handleRatingChange(rating)} />
-                    <span>{renderStars(rating)}</span>
-                  </div>
-                ))}
+                
               </div>
             </div>
           </div>

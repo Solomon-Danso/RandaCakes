@@ -148,15 +148,7 @@ const SearchProducts = () => {
           </div>
 
           {/* RATING FILTER */}
-          <div className="cateProducts-Category">
-            <div className="header">Filter By Rating</div>
-            {[5, 4, 3, 2, 1].map((rating) => (
-              <div key={rating} className="filter-category-item">
-                <input type="checkbox" checked={!!checkedRatings[rating]} onChange={() => handleRatingChange(rating)} />
-                <span>{renderStars(rating)}</span>
-              </div>
-            ))}
-          </div>
+          
         </div>
 
         <div className="cateProducts-Right">
@@ -200,13 +192,7 @@ const SearchProducts = () => {
                   <span>Max: GHC{maxPrice.toFixed(2)}</span>
                 </div>
 
-                <div className="header">Filter By Rating</div>
-                {[5, 4, 3, 2, 1].map((rating) => (
-                  <div key={rating} className="filter-category-item">
-                    <input type="checkbox" checked={!!checkedRatings[rating]} onChange={() => handleRatingChange(rating)} />
-                    <span>{renderStars(rating)}</span>
-                  </div>
-                ))}
+                
               </div>
             </div>
           </div>

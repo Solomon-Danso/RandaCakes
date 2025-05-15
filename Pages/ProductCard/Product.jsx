@@ -5,6 +5,7 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import ProductCard from './ProductCard';
 import FilteredSectionLoader from '@/Components/FilterSectionLoader';
 import { useCartStore } from '@/Components/CartStore';
+import { Categories, DummyProducts } from '@/Constants/data';
 
 const Product = () => {
   const scrollRef = useRef(null);
@@ -12,7 +13,7 @@ const Product = () => {
   const [loading, setLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  const { loadProducts, productList, loadCategory, categoryList } = useCartStore();
+  const { loadProducts, loadCategory, categoryList } = useCartStore();
 
   // Load products and categories once on mount
   useEffect(() => {
@@ -20,21 +21,21 @@ const Product = () => {
     loadCategory();
   }, []);
 
-  // Filter products only when both productList and categoryList are available
+  // Filter products only when both DummyProducts and categoryList are available
   useEffect(() => {
-    const bothLoaded = categoryList.length > 0 && productList.length > 0;
+    const bothLoaded = Categories.length > 0 && DummyProducts.length > 0;
     if (!bothLoaded) {
       setLoading(true);
       return;
     }
 
     setLoading(true);
-    const filtered = productList.filter(
-      (item) => item.category === categoryList[activeIndex]?.name
+    const filtered = DummyProducts.filter(
+      (item) => item.category === Categories[activeIndex]?.name
     );
     setFilteredProducts(filtered);
     setLoading(false);
-  }, [productList, categoryList, activeIndex]);
+  }, [DummyProducts, Categories, activeIndex]);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -60,8 +61,8 @@ const Product = () => {
           <FiChevronLeft className="scroll-btn left" size={30} color='black' onClick={() => scroll('left')} />
 
           <div className="product-header-right" ref={scrollRef}>
-            {categoryList.length > 0 &&
-              categoryList.slice(0, 7).map((data, index) => (
+            {Categories.length > 0 &&
+              Categories.slice(0, 7).map((data, index) => (
                 <div
                   className={`category-item ${activeIndex === index ? 'active' : ''}`}
                   key={index}

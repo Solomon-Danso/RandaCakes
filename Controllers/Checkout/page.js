@@ -242,7 +242,6 @@ const Payment = async () => {
   const thePaymentMethod = [
    {"PaymentMethod":"Mobile Money or Credit Card" },
    {"PaymentMethod":"Payment On Delivery" },
-   {"PaymentMethod":"Shopping Card" },
    
 
   ]

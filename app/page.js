@@ -33,13 +33,12 @@ const { loadProducts, productList, loadCategory, categoryList } = useCartStore()
 <Navbar/>
 <Hero/>
 <HeroBar/>
-<Product/>
-<Banner/>
+
 
 <ForYouContainer/>
 
 {
-  categoryList.map((data, index)=>(
+  Categories.map((data, index)=>(
   <div key={index}>
 <MultiProduct cate={data.name}/>
   </div>))

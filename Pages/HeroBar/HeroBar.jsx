@@ -22,9 +22,9 @@ const HeroBar = () => {
 
   return (
     <div className='hero-bar'>
-      {categoryList.map((data, index) => (
+      {Categories.map((data, index) => (
         <div className='hero-card' key={index} onClick={()=>navigate(`/products?category=${data.name}`)}>
-          <img src={apiMedia +data.image} alt={data.name} className="banner-hero-icon" />
+          <img src={data.image} alt={data.name} className="banner-hero-icon" />
           <span className="hero-label">{data.name}</span>
         </div>
       ))}

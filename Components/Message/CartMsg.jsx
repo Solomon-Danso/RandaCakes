@@ -42,7 +42,7 @@ const CartMsg = ({ mobileOpen, toggler = () => {} }) => {
         <div style={{display:"flex", flexDirection:"column", gap:"0.5rem", marginTop:"1rem"}}>
           {cart.map((item, index) => (
             <div key={index} style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-              <img src={apiMedia+item.mainPicture} alt="Product" style={{width:"100px", height:"100px"}} />
+              <img src={item.mainPicture} alt="Product" style={{width:"100px", height:"100px"}} />
               <div style={{display:"flex", flexDirection:"column", gap:"0.5rem"}}>
                 <div style={{fontSize:"0.8rem"}}>{item.title}</div>
                 <div>Size: {item.size}</div>

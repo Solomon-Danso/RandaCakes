@@ -11,7 +11,7 @@ import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { PiRepeatOnceBold } from 'react-icons/pi';
 import ProductLoader from '@/Components/ProductLoader';
 import { useCartStore } from '@/Components/CartStore';
-import { apiMedia } from '@/Constants/data';
+import { apiMedia, DummyProducts } from '@/Constants/data';
 
 const ProductDetails = () => {
   const searchParams = useSearchParams();
@@ -19,7 +19,7 @@ const ProductDetails = () => {
   const router = useRouter();
 
   const {
-    loadProducts, productList,
+    loadProducts,
     loadCategory,
     cart, wishlist,
     loadCart, loadWishlist,
@@ -46,13 +46,14 @@ const ProductDetails = () => {
 
   // When products are loaded, get the matching product
   useEffect(() => {
-    if (productId && productList.length > 0) {
-      const foundProduct = productList.find(p => p.productId === productId);
+    if (productId && DummyProducts.length > 0) {
+      const id = parseInt(productId);
+      const foundProduct = DummyProducts.find(p => p.productId === id);
       setModalContent(foundProduct);
       setActiveImage(foundProduct?.mainPicture || '');
       setLoading(false);
     }
-  }, [productId, productList]);
+  }, [productId, DummyProducts]);
 
   console.log("ModalContent", modalContent)
 
@@ -120,7 +121,7 @@ const ProductDetails = () => {
             {modalContent?.subPictures?.map((subImage, idx) => (
               <img
                 key={idx}
-                src={apiMedia+subImage}
+                src={subImage}
                 alt="Sub"
                 className="sub-image-item"
                 onMouseEnter={() => setActiveImage(subImage)}
@@ -131,15 +132,14 @@ const ProductDetails = () => {
           <div className="main-image-container">
             {activeImage && (
               <img
-                src={apiMedia+activeImage}
+                src={activeImage}
                 alt="Main"
                 className="main-image"
                 ref={mainImageRef}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
+                
               />
             )}
-            <div className="magnifier-glass" ref={magnifierRef}></div>
+            
           </div>
         </div>
 
@@ -223,26 +223,9 @@ const ProductDetails = () => {
             )}
           </div>
 
-          <div className="wishlist-compare">
-            <div className="wishlist-item">
-              {wishlist.find(item => item.productId === modalContent.productId) ? (
-                <div onClick={() => deleteFromWishlist(modalContent.productId)}>
-                  <FaHeart color="red" size={30} />
-                  <span>Remove From Wishlist</span>
-                </div>
-              ) : (
-                <div onClick={() => addToWishList(modalContent, 1)}>
-                  <FiHeart size={30} />
-                  <span>Add to Wishlist</span>
-                </div>
-              )}
-            </div>
+          
 
-            <div className="wishlist-item">
-              <PiRepeatOnceBold size={30} />
-              <span>Add to Compare</span>
-            </div>
-          </div>
+
         </div>
       </div>
 

@@ -44,7 +44,7 @@ const ForYouContainer = ({cate}) => {
       <div className="product-header">
 
         <div className="product-header-left">
-          <div className='prd-Title'>Selected Product For You [AI POWERED]</div>
+          <div className='prd-Title'>Selected Product For You</div>
       
         </div>
 

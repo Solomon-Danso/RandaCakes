@@ -24,7 +24,7 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortOption, setSortOption] = useState("");
 
-  const { loadCart, loadProducts,productList,loadCategory, categoryList } = useCartStore();
+  const { loadCart, loadProducts,loadCategory, categoryList } = useCartStore();
 
   useEffect(() => {
     loadCart();
@@ -35,7 +35,7 @@ const Products = () => {
 
 
   useEffect(() => {
-    const maxProductPrice = Math.max(...productList.map(p => p.price));
+    const maxProductPrice = Math.max(...DummyProducts.map(p => p.price));
     setMaxPrice(maxProductPrice + 10);
     setPriceRange(0);
 
@@ -44,11 +44,11 @@ const Products = () => {
     if (selectedSubcategory) preChecked[selectedSubcategory] = true;
     if (selectedGeneralCategory) preChecked[selectedGeneralCategory] = true;
     setCheckedCategories(preChecked);
-  }, [selectedCategory, selectedSubcategory, selectedGeneralCategory,productList]);
+  }, [selectedCategory, selectedSubcategory, selectedGeneralCategory,DummyProducts]);
 
   useEffect(() => {
     filterProducts();
-  }, [checkedCategories, priceRange, checkedRatings, sortOption, productList]);
+  }, [checkedCategories, priceRange, checkedRatings, sortOption, DummyProducts]);
 
   const handleCheckboxChange = (categoryName) => {
     setCheckedCategories((prev) => ({
@@ -73,7 +73,7 @@ const Products = () => {
   };
 
   const filterProducts = () => {
-    let filtered = productList.filter(product => product.price >= priceRange);
+    let filtered = DummyProducts.filter(product => product.price >= priceRange);
 
     const selectedCategories = Object.keys(checkedCategories).filter(key => checkedCategories[key]);
    // console.log("Selected Categories: ", selectedCategories);
@@ -166,7 +166,7 @@ const toggleFilterModal = () => {
           {/* CATEGORY FILTER */}
           <div className="cateProducts-Category">
             <div className="header">Filter By Category</div>
-            {categoryList.map((data, index) => (
+            {Categories.map((data, index) => (
               <div key={index} className="filter-category-item">
                 <input
                   type="checkbox"
@@ -198,19 +198,7 @@ const toggleFilterModal = () => {
           </div>
 
           {/* RATING FILTER */}
-          <div className="cateProducts-Category">
-            <div className="header">Filter By Rating</div>
-            {[5, 4, 3, 2, 1].map((rating, index) => (
-              <div key={index} className="filter-category-item">
-                <input
-                  type="checkbox"
-                  checked={!!checkedRatings[rating]}
-                  onChange={() => handleRatingChange(rating)}
-                />
-                <span>{renderStars(rating)}</span>
-              </div>
-            ))}
-          </div>
+         
 
          
           
@@ -251,7 +239,7 @@ const toggleFilterModal = () => {
       {/* Put your FILTERS here (same content as cateProducts-Left) */}
       <div className="modal-filters">
         <div className="header">Filter By Category</div>
-        {categoryList.map((data, index) => (
+        {Categories.map((data, index) => (
           <div key={index} className="filter-category-item">
             <input
               type="checkbox"
@@ -278,17 +266,7 @@ const toggleFilterModal = () => {
           </div>
         </div>
 
-        <div className="header">Filter By Rating</div>
-        {[5, 4, 3, 2, 1].map((rating, index) => (
-          <div key={index} className="filter-category-item">
-            <input
-              type="checkbox"
-              checked={!!checkedRatings[rating]}
-              onChange={() => handleRatingChange(rating)}
-            />
-            <span>{renderStars(rating)}</span>
-          </div>
-        ))}
+
       </div>
     </div>
   </div>

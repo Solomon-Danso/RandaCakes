@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react'
 import './Navbar.css'
-import Logo from "@/public/assets/images/logo.png"
+import Logo from "@/public/assets/images/randa.jpg"
 import { GrFavorite } from "react-icons/gr";
 import { IoIosSearch, IoMdArrowDropdown, IoMdPerson } from "react-icons/io";
 import { GiShoppingCart } from "react-icons/gi";
@@ -130,7 +130,8 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
         <img
           src={Logo.src}
           alt="Logo"
-          className='logo'
+          // className='logo'
+          style={{width:"120px", height:"80px"}}
           onClick={() => navigate('/')}
         />
         
@@ -150,13 +151,12 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
           <div className="user-profile remover" onClick={()=>navigate("/profile")}>
             <div className="icon"> <IoMdPerson size={20} /> </div>
             <div className="user-info">
-              <div>Solomon Danso</div>
-              <div>solomondanso2023@gmail.com</div>
+              <div>Randa Cakes</div>
+              <div>randacakes@gmail.com</div>
             </div>
           </div>
 
-          <div className="icon remover" style={{ backgroundColor: "white" }} onClick={()=>navigate("/favourite")}> <GrFavorite size={25} /> <span style={{color:"red", fontFamily:"Hydot-Bold"}}>{wishlist.length}</span>
-          </div>
+         
           <div className="icon" style={{ backgroundColor: "white" }} onClick={()=>theCart()}> 
             <GiShoppingCart size={25} /> 
             <span style={{color:"red", fontFamily:"Hydot-Bold"}}>{cart.length}</span>
@@ -177,7 +177,7 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
         </div>
 
         <div className="categories-container">
-          {categoryList.slice(0, 7).map((category) => (
+          {Categories.slice(0, 7).map((category) => (
             <div
               key={category.id}
               className="category-item-wrapper"
@@ -277,11 +277,7 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
 
 </div>
 
-<div style={{ display: "flex", alignItems: "center", flexDirection:'column', gap:'5px', paddingLeft:"10px"}} onClick={()=>navigate("/favourite")}>
-<GrFavorite size={22}/>
-<div style={{fontSize:"0.8rem"}}>Wishlist</div>
 
-</div>
 
 <div style={{ display: "flex", alignItems: "center", flexDirection:'column', gap:'5px', paddingLeft:"10px"}} onClick={()=>navigate("/myOrders")}>
 <LuClipboardCheck size={22}/>

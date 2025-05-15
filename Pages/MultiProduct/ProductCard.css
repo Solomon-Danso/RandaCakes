@@ -441,9 +441,10 @@
 }
 .product-row{
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  gap:0.5rem;
   padding-top: 0.5rem;
+   padding-bottom: 0.5rem;
 }
 
 @media (min-width:1025px) {

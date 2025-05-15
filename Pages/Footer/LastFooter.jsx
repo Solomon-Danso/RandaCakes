@@ -16,7 +16,7 @@ const LastFooter = () => {
             }
         </div>
 
-        <div> © {new Date().getFullYear()} UG Mall. All rights reserved.</div>
+        <div> © {new Date().getFullYear()} Randa Cakes. All rights reserved.</div>
 
             <div className='theEnd'></div>
 
