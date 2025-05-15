@@ -66,15 +66,35 @@ loadProducts: async () => {},
     set({ searchTerm: term });
   },
 
+  // searchedProducts: () => {
+  //   const { searchTerm, productList } = get();
+  //   if (!searchTerm) {
+  //     set({ searchedProductsList: productList });
+  //     return productList;
+  //   }
+  
+  //   const lowerTerm = searchTerm.toLowerCase();
+  //   const searchProducts = productList.filter(product =>
+  //     product.title.toLowerCase().includes(lowerTerm) ||
+  //     product.description?.toLowerCase().includes(lowerTerm) ||
+  //     product.category?.toLowerCase().includes(lowerTerm) ||
+  //     product.subCate?.toLowerCase().includes(lowerTerm)
+  //   );
+  
+  //   set({ searchedProductsList: searchProducts });
+  //   return searchProducts;
+  // },
+
+
   searchedProducts: () => {
     const { searchTerm, productList } = get();
     if (!searchTerm) {
-      set({ searchedProductsList: productList });
-      return productList;
+      set({ searchedProductsList: DummyProducts });
+      return DummyProducts;
     }
   
     const lowerTerm = searchTerm.toLowerCase();
-    const searchProducts = productList.filter(product =>
+    const searchProducts = DummyProducts.filter(product =>
       product.title.toLowerCase().includes(lowerTerm) ||
       product.description?.toLowerCase().includes(lowerTerm) ||
       product.category?.toLowerCase().includes(lowerTerm) ||
@@ -84,6 +104,8 @@ loadProducts: async () => {},
     set({ searchedProductsList: searchProducts });
     return searchProducts;
   },
+
+
 
   forYouProducts: () => {
     const { productList } = get();
