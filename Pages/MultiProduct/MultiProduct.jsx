@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
 import "./ProductCard.css"
-import { Categories, DummyProducts } from '@/Constants/data'
+import { Categories } from '@/Constants/data'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import ProductCard from './ProductCard';
 import FilteredSectionLoader from '@/Components/FilterSectionLoader';
@@ -13,7 +13,7 @@ const MultiProduct = ({ cate }) => {
   const [loading, setLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  const { loadProducts, loadCategory, categoryList } = useCartStore();
+  const { loadProducts, productList, loadCategory, categoryList } = useCartStore();
 
   // Load products and categories once on mount
   useEffect(() => {
@@ -25,7 +25,7 @@ const MultiProduct = ({ cate }) => {
     setLoading(true);
 
     const timeout = setTimeout(() => {
-      const filtered = DummyProducts.filter(
+      const filtered = productList.filter(
         (item) => item.category === cate
       );
       setFilteredProducts(filtered);
@@ -33,7 +33,7 @@ const MultiProduct = ({ cate }) => {
     }, 5000); // Simulate loading delay
 
     return () => clearTimeout(timeout);
-  }, [DummyProducts, cate, activeIndex]);
+  }, [productList, cate, activeIndex]);
 
   const scroll = (direction) => {
     if (scrollRef.current) {

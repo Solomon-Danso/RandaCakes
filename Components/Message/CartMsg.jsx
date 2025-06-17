@@ -3,6 +3,9 @@ import { MdDelete } from "react-icons/md";
 import { useCartStore } from "../CartStore";
 import { useRouter } from "next/navigation";
 import { apiMedia } from "@/Constants/data";
+import { AES, enc } from 'crypto-js';
+import { useEffect, useState } from "react";
+import { Show } from "@/Constants/Alerts";
 
 const CartMsg = ({ mobileOpen, toggler = () => {} }) => {
   const { cart, deleteFromCart,processTheOrder } = useCartStore();
@@ -24,11 +27,57 @@ const CartMsg = ({ mobileOpen, toggler = () => {} }) => {
       router.push(path);
     };
 
-    const Checkout = () =>{
+
+    const [userInfo, setUserInfo] = useState({});
+
+    useEffect(() => {
+    try {
+      const encryptedData = sessionStorage.getItem("userDataEnc");
+      const encryptionKey = '$2a$11$3lkLrAOuSzClGFmbuEAYJeueRET0ujZB2TkY9R/E/7J1Rr2u522CK';
+      const decryptedData = AES.decrypt(encryptedData, encryptionKey);
+      const decryptedString = decryptedData.toString(enc.Utf8);
+      const parsedData = JSON.parse(decryptedString);
+      setUserInfo(parsedData);
+    } catch (error) {
+    }
+  }, []);
+
+
+
+
+    const LoginNotRequired = () => {
       processTheOrder();
       navigate("/checkout")
-
     }
+
+     const LoginRequired = () => {
+      processTheOrder();
+      navigate("/checkoutauth")
+    }
+
+    const Checkout = () => {
+  if (!userInfo?.Email) {
+    Show.Confirm(
+      "Would you like to Log in for a faster order tracking",
+      LoginRequired,    // ✅ Pass function, do not call it
+      LoginNotRequired  // ✅ Pass function, do not call it
+    );
+  } else {
+    // User is already logged in
+    processTheOrder();
+    navigate("/checkout");
+  }
+  
+};
+
+
+
+
+
+
+
+
+
 
   return (
     <div >
@@ -42,7 +91,7 @@ const CartMsg = ({ mobileOpen, toggler = () => {} }) => {
         <div style={{display:"flex", flexDirection:"column", gap:"0.5rem", marginTop:"1rem"}}>
           {cart.map((item, index) => (
             <div key={index} style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-              <img src={item.mainPicture} alt="Product" style={{width:"100px", height:"100px"}} />
+              <img src={apiMedia+item.mainPicture} alt="Product" style={{width:"100px", height:"100px"}} />
               <div style={{display:"flex", flexDirection:"column", gap:"0.5rem"}}>
                 <div style={{fontSize:"0.8rem"}}>{item.title}</div>
                 <div>Size: {item.size}</div>
@@ -84,7 +133,7 @@ const CartMsg = ({ mobileOpen, toggler = () => {} }) => {
           </div>
           <div style={{display:"flex", justifyContent:"space-between", fontWeight:"bold", fontSize:"1rem"}}>
             <span>Total:</span>
-            <span style={{fontFamily:"Hydot-Bold"}}>{formatCurrency(total)}</span>
+            <span style={{fontFamily:"Hydot-Bold"}}>{formatCurrency(total)} + Delivery Fee</span>
           </div>
  </div>
 

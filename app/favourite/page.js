@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { FaStar, FaStarHalfAlt, FaRegStar, FaHeart } from 'react-icons/fa'
 import { useCartStore } from '@/Components/CartStore'
 import { MdDelete } from 'react-icons/md'
+import { AES, enc } from 'crypto-js';
 
 const Page = () => {
 
@@ -35,6 +36,23 @@ const { loadCart,saveCart,addToCartWithSize,addToCart,deleteFromCart,updateCartQ
             };
 
 
+const [userInfo, setUserInfo] = useState({});
+
+    useEffect(() => {
+    try {
+      const encryptedData = sessionStorage.getItem("userDataEnc");
+      const encryptionKey = '$2a$11$3lkLrAOuSzClGFmbuEAYJeueRET0ujZB2TkY9R/E/7J1Rr2u522CK';
+      const decryptedData = AES.decrypt(encryptedData, encryptionKey);
+      const decryptedString = decryptedData.toString(enc.Utf8);
+      const parsedData = JSON.parse(decryptedString);
+      setUserInfo(parsedData);
+    } catch (error) {
+      console.error("Error decrypting user data:");
+    }
+  }, []);
+
+
+
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating - fullStars >= 0.5;
@@ -58,10 +76,10 @@ const { loadCart,saveCart,addToCartWithSize,addToCart,deleteFromCart,updateCartQ
 <div className='profile-left'>
 
 <div className='profile-left-1'>
-<div style={{width:"120px", height:"120px", borderRadius:"50%", backgroundColor:"#EC407A", color:"white", textAlign:"center", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", fontSize:"50px", fontWeight:"bold"}}>S</div>
+<div style={{width:"120px", height:"120px", borderRadius:"50%", backgroundColor:"#EC407A", color:"white", textAlign:"center", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", fontSize:"50px", fontWeight:"bold"}}> {userInfo?.FullName?.charAt(0)?.toUpperCase() || ""}</div>
 <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
-    <div style={{fontSize:"1.3rem", fontWeight:"bold"}}>Randa Cakes</div>
-    <div>randacakes@gmail.com</div>
+    <div style={{fontSize:"1.3rem", fontWeight:"bold"}}>{userInfo.FullName}</div>
+    <div>{userInfo.Email}</div>
 </div>
 
 </div>
@@ -106,7 +124,7 @@ const { loadCart,saveCart,addToCartWithSize,addToCart,deleteFromCart,updateCartQ
              
             }}>
             <div style={{display:"flex", flexDirection:"row", gap:"1rem", alignItems:"center"}}>
-            <img src={ item.mainPicture} alt="Product" style={{width:"150px", height:"150px"}} />
+            <img src={ apiMedia+item.mainPicture} alt="Product" style={{width:"150px", height:"150px"}} />
 
             <div style={{display:"flex", flexDirection:"column", gap:"0.5rem"}}>
                 <div style={{fontSize:"0.8rem"}}>{item.category}</div>
@@ -138,7 +156,7 @@ const { loadCart,saveCart,addToCartWithSize,addToCart,deleteFromCart,updateCartQ
               />
             </div>
           ))}
-        </div>
+</div>
 
    
 

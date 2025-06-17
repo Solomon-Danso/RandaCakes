@@ -11,7 +11,7 @@ import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { PiRepeatOnceBold } from 'react-icons/pi';
 import ProductLoader from '@/Components/ProductLoader';
 import { useCartStore } from '@/Components/CartStore';
-import { apiMedia, DummyProducts } from '@/Constants/data';
+import { apiMedia } from '@/Constants/data';
 
 const ProductDetails = () => {
   const searchParams = useSearchParams();
@@ -19,7 +19,7 @@ const ProductDetails = () => {
   const router = useRouter();
 
   const {
-    loadProducts,
+    loadProducts, productList,
     loadCategory,
     cart, wishlist,
     loadCart, loadWishlist,
@@ -46,43 +46,16 @@ const ProductDetails = () => {
 
   // When products are loaded, get the matching product
   useEffect(() => {
-    if (productId && DummyProducts.length > 0) {
-      const id = parseInt(productId);
-      const foundProduct = DummyProducts.find(p => p.productId === id);
+    if (productId && productList.length > 0) {
+      const foundProduct = productList.find(p => p.productId === productId);
       setModalContent(foundProduct);
       setActiveImage(foundProduct?.mainPicture || '');
       setLoading(false);
     }
-  }, [productId, DummyProducts]);
+  }, [productId, productList]);
 
-  console.log("ModalContent", modalContent)
 
-  // Magnifier effect
-  const handleMouseMove = (e) => {
-    const magnifier = magnifierRef.current;
-    const image = mainImageRef.current;
-    if (!magnifier || !image) return;
-
-    const rect = image.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const magnifierSize = 150;
-    const zoom = 2;
-
-    magnifier.style.left = `${x - magnifierSize / 2}px`;
-    magnifier.style.top = `${y - magnifierSize / 2}px`;
-    magnifier.style.backgroundImage = `url(${image.src})`;
-    magnifier.style.backgroundRepeat = 'no-repeat';
-    magnifier.style.backgroundSize = `${image.width * zoom}px ${image.height * zoom}px`;
-    magnifier.style.backgroundPosition = `${(x / rect.width) * 100}% ${(y / rect.height) * 100}%`;
-    magnifier.style.display = 'block';
-  };
-
-  const handleMouseLeave = () => {
-    if (magnifierRef.current) magnifierRef.current.style.display = 'none';
-  };
-
+  
   const formatCurrency = (value) =>
     new Intl.NumberFormat('en-GH', {
       style: 'currency',
@@ -121,7 +94,7 @@ const ProductDetails = () => {
             {modalContent?.subPictures?.map((subImage, idx) => (
               <img
                 key={idx}
-                src={subImage}
+                src={apiMedia+subImage}
                 alt="Sub"
                 className="sub-image-item"
                 onMouseEnter={() => setActiveImage(subImage)}
@@ -132,14 +105,14 @@ const ProductDetails = () => {
           <div className="main-image-container">
             {activeImage && (
               <img
-                src={activeImage}
+                src={apiMedia+activeImage}
                 alt="Main"
                 className="main-image"
                 ref={mainImageRef}
-                
+               
               />
             )}
-            
+            <div className="magnifier-glass" ref={magnifierRef}></div>
           </div>
         </div>
 
@@ -206,15 +179,27 @@ const ProductDetails = () => {
 
           <div className="product-actions">
             {cart.find(item => item.productId === modalContent.productId) ? (
-              <div className="quantity-control">
-                <button onClick={() => updateCartQuantity(modalContent, -1)}>-</button>
-                <input
-                  type="text"
-                  readOnly
-                  value={cart.find(item => item.productId === modalContent.productId)?.quantity || 1}
-                />
-                <button onClick={() => updateCartQuantity(modalContent, 1)}>+</button>
-              </div>
+           
+
+<div className="quantity-control">
+    <button 
+      className="quantity-btn-left" 
+      onClick={() => updateCartQuantity(modalContent, -1)}
+    >-</button>
+
+    <input 
+      type="text" 
+      className="quantity-input" 
+      value={cart.find(cartItem => cartItem.productId === modalContent.productId)?.quantity || 1} 
+      readOnly
+    />
+
+    <button 
+      className="quantity-btn-right" 
+      onClick={() => updateCartQuantity(modalContent, 1)}
+    >+</button>  {/* <-- HERE: corrected item, not item.productId, */}
+  </div>
+
             ) : (
               <div className="add-to-cart-btn1" onClick={() => addToCartWithSize(modalContent, 1, selectedSize)}>
                 <FiShoppingCart style={{ marginRight: '8px' }} />
@@ -223,9 +208,7 @@ const ProductDetails = () => {
             )}
           </div>
 
-          
-
-
+       
         </div>
       </div>
 

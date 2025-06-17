@@ -212,6 +212,7 @@
   
   .product-image {
     width: 100%;
+    min-width:255px;
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
@@ -442,10 +443,56 @@
 .product-row{
   display: flex;
   flex-direction: column;
-  gap:0.5rem;
+  justify-content: space-between;
   padding-top: 0.5rem;
-   padding-bottom: 0.5rem;
 }
+
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+ 
+}
+
+.quantity-btn-right {
+  background-color: #141313;
+  border: 1px solid #d1d5db;
+  padding: 4px 8px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #fff;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  width: 40px;
+}
+
+.quantity-btn-left {
+  background-color: #141313;
+  border: 1px solid #d1d5db;
+  padding: 4px 8px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #fff;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  width: 40px;
+}
+
+.quantity-input {
+  width: 100%;
+  text-align: center;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 8px;
+  color:#141313;
+  background-color: #fff;
+}
+
+
 
 @media (min-width:1025px) {
   .sub-image{

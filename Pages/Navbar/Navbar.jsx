@@ -1,22 +1,22 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react'
 import './Navbar.css'
-import Logo from "@/public/assets/images/randa.jpg"
+import Logo from "@/public/assets/images/logo.png"
 import { GrFavorite } from "react-icons/gr";
 import { IoIosSearch, IoMdArrowDropdown, IoMdPerson } from "react-icons/io";
 import { GiShoppingCart } from "react-icons/gi";
 import { RiMenu2Fill } from "react-icons/ri";
-import { Categories } from '@/Constants/data';
+import { apiMedia, apiServer, Categories } from '@/Constants/data';
 import { IoHome, IoRocketOutline } from "react-icons/io5";
 import CateMsg from '@/Components/Message/CateMsg';
 import CartMsg from '@/Components/Message/CartMsg';
 import { LuClipboardCheck } from "react-icons/lu";
 import { useRouter } from 'next/navigation';
-import { FaFilter } from 'react-icons/fa';
-import CryptoJS from 'crypto-js';
+import { AES, enc } from 'crypto-js';
 import { useCartStore } from '@/Components/CartStore';
 import FooterNavCard from '@/Components/Message/FooterNavCard';
 import Wishlist from '@/Components/Message/Wishlist';
+import { FiShoppingCart } from 'react-icons/fi';
 
 const Navbar = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -102,6 +102,40 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
     loadWishlist()
   }, []);
 
+  const [userInfo, setUserInfo] = useState({});
+
+    useEffect(() => {
+    try {
+      const encryptedData = sessionStorage.getItem("userDataEnc");
+      const encryptionKey = '$2a$11$3lkLrAOuSzClGFmbuEAYJeueRET0ujZB2TkY9R/E/7J1Rr2u522CK';
+      const decryptedData = AES.decrypt(encryptedData, encryptionKey);
+      const decryptedString = decryptedData.toString(enc.Utf8);
+      const parsedData = JSON.parse(decryptedString);
+      setUserInfo(parsedData);
+    } catch (error) {
+    }
+  }, []);
+
+   const [person, setPerson] = useState({})
+    const [imageLoaded, setImageLoaded] = useState(false);
+    
+    useEffect(() => {
+          
+              const formData = new FormData();
+                      
+              fetch(apiServer + "WebsiteDetails", {
+                method: "POST",
+               
+               
+                body: formData
+              })
+                .then(res => res.json())
+                .then(data=>setPerson(data))
+                .catch(err => console.error(err));
+            
+      }, []);
+  
+
   
   return (
 <div>
@@ -118,8 +152,8 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
       <div className="section-1">
         <div>Get up to 50% off new season styles, limited time only</div>
         <div className="section-1-links">
-          <div>Help Center</div>
-          <div>Order Tracking</div>
+          <div>Affordable Product</div>
+          <div>Faster delivery</div>
         </div>
       </div>
       
@@ -127,13 +161,33 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
       <div className="section-2">
       <div className="icon viewer" style={{ backgroundColor: "white" }} onClick={()=>theMsg()}> <RiMenu2Fill size={25} /> </div>
 
-        <img
-          src={Logo.src}
+        {/* <img
+          src={apiMedia+person.Logo}
           alt="Logo"
-          // className='logo'
-          style={{width:"120px", height:"80px"}}
+          className='logo'
           onClick={() => navigate('/')}
+        /> */}
+
+        {!imageLoaded && (
+        <div >
+          <FiShoppingCart size={32} />
+        </div>
+      )}
+
+      {person.Logo && (
+        <img
+          src={apiMedia + person.Logo}
+          alt="Logo"
+          className={` ${!imageLoaded ? 'invisible' : ''}`} // hide until loaded
+          onClick={() => navigate('/')}
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageLoaded(false)}
+          style={{width:"70px", height:"70px", borderRadius:"50%", color:"white", textAlign:"center", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", fontSize:"50px", fontWeight:"bold"}}
         />
+      )}
+
+
+
         
        <div className="search remover" onClick={()=>navigate("/search")}>
       <input
@@ -148,15 +202,15 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
     </div>
 
         <div className="user-actions">
-          <div className="user-profile remover" onClick={()=>navigate("/profile")}>
+          <div className="user-profile remover" onClick={()=>{userInfo.UserId?navigate("/profile"): navigate("/authenticate")}}>
             <div className="icon"> <IoMdPerson size={20} /> </div>
             <div className="user-info">
-              <div>Randa Cakes</div>
-              <div>randacakes@gmail.com</div>
+              <div>{userInfo.FullName}</div>
+              <div>{userInfo.Email}</div>
             </div>
           </div>
 
-         
+
           <div className="icon" style={{ backgroundColor: "white" }} onClick={()=>theCart()}> 
             <GiShoppingCart size={25} /> 
             <span style={{color:"red", fontFamily:"Hydot-Bold"}}>{cart.length}</span>
@@ -177,7 +231,7 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
         </div>
 
         <div className="categories-container">
-          {Categories.slice(0, 7).map((category) => (
+          {categoryList.slice(0, 7).map((category) => (
             <div
               key={category.id}
               className="category-item-wrapper"
@@ -244,7 +298,7 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
         <div style={{ display: "flex", alignItems: "center", flexDirection:'row', gap:'5px', paddingLeft:"10px"}}>
 
         <IoRocketOutline />
-        <div style={{ whiteSpace: "nowrap"}}>Free International Delivery</div>
+        <div style={{ whiteSpace: "nowrap"}}>Faster Delivery</div>
 
         </div>
 
@@ -277,7 +331,11 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
 
 </div>
 
+<div style={{ display: "flex", alignItems: "center", flexDirection:'column', gap:'5px', paddingLeft:"10px"}} onClick={()=>navigate("/favourite")}>
+<GrFavorite size={22}/>
+<div style={{fontSize:"0.8rem"}}>Wishlist</div>
 
+</div>
 
 <div style={{ display: "flex", alignItems: "center", flexDirection:'column', gap:'5px', paddingLeft:"10px"}} onClick={()=>navigate("/myOrders")}>
 <LuClipboardCheck size={22}/>
@@ -286,7 +344,7 @@ const {saveCart,addToCart,deleteFromCart,updateCartQuantity,clearCart, wishlist,
 </div>
 
 
-<div style={{ display: "flex", alignItems: "center", flexDirection:'column', gap:'5px', paddingLeft:"10px"}} onClick={()=>navigate("/profile")}>
+<div style={{ display: "flex", alignItems: "center", flexDirection:'column', gap:'5px', paddingLeft:"10px"}} onClick={()=>{userInfo.UserId?navigate("/profile"): navigate("/authenticate")}}>
 <IoMdPerson size={22}/>
 <div style={{fontSize:"0.8rem"}}>Account</div>
 

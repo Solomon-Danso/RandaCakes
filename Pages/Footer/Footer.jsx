@@ -1,25 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Footer.css"
 import CustomButton from '@/Components/Button'
+import { useRouter } from 'next/navigation';
+import { apiServer } from '@/Constants/data';
 
 const Footer = () => {
+   const router = useRouter();
+          const navigate = (path) => {
+            router.push(path);
+          };
+
+          const [person, setPerson] = useState({})
+                          
+              useEffect(() => {
+                    
+                        const formData = new FormData();
+                                
+                        fetch(apiServer + "WebsiteDetails", {
+                          method: "POST",
+                         
+                         
+                          body: formData
+                        })
+                          .then(res => res.json())
+                          .then(data=>setPerson(data))
+                          .catch(err => console.error(err));
+                      
+                }, []);
+            
+
+  
   return (
     <div className='footer'>
     
     <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
         <div className="title">Contact us</div>
-        <div>Ran</div>
-        <div>507-Union Trade Centre Accra</div>
-        <div style={{fontSize:"1.5rem", color:"#FF5252"}}>0599626272</div>
+        <div>{person.Address1}</div>
+        <div>{person.Address2}</div>
+        <div style={{fontSize:"1.5rem", color:"#FF5252"}}>{person.PhoneNumber}</div>
+    </div>
+
+    <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
+        <div className="title" onClick={()=>navigate("/search")}>What do you want?</div>
+         <div>Whatever your business needs are, we have got you covered...</div>    
     </div>
 
     {/* <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
-        <div className="title">Our company</div>
-        <div>Randa Cakes, an authorized online marketplace, offers a comprehensive platform for businesses across Ghana to buy and sell a diverse range of goods and services. This digital hub aims to streamline commercial transactions, providing a convenient and reliable space for businesses to connect and trade.</div>
-       
-    </div> */}
-
-    <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
         <div className="title">Subscribe to newsletter</div>
         <div>Subscribe to our latest newsletter to get news about special discounts.</div>
        
@@ -29,7 +55,7 @@ const Footer = () => {
        title={"Subscribe"}
        backgroundColor='#FF5252'
        />
-    </div>
+    </div> */}
 
 
 

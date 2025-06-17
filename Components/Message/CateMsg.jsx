@@ -1,11 +1,10 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import "./Message.css";
-import Logo from "@/public/assets/images/randa.jpg"
+import Logo from "@/public/assets/images/logo.png"
 import { FiPlusSquare, FiMinusSquare  } from "react-icons/fi";
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '../CartStore';
-import { Categories } from '@/Constants/data';
 
 const CategoryAccordion = ({ mobileOpen, toggler = () => {} }) => {
   const [expandedCategory, setExpandedCategory] = useState(null);
@@ -51,7 +50,7 @@ const CategoryAccordion = ({ mobileOpen, toggler = () => {} }) => {
 
 
         <div className="category-wrapper">
-          {Categories.map(category => (
+          {categoryList.map(category => (
             <div key={category.id} className="category-block">
               <div className="category-row">
                 <span className="category-name" onClick={()=>navigate(`/products?category=${category.name}`)}>{category.name}</span>

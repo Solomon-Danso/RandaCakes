@@ -1,38 +1,50 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import './Hero.css';
-import "@/Components/Loader.css"; // Uses your existing shimmer styles
+import "@/Components/Loader.css"; // Your shimmer/loader styles
+import { apiMedia, apiServer } from '@/Constants/data';
 
 const Hero = () => {
+  const [person, setPerson] = useState(null);
   const [slides, setSlides] = useState([]);
   const [current, setCurrent] = useState(0);
-  const [loading, setLoading] = useState(true);
 
-  const fetchSlides = async () => {
-    // Simulated API delay
-    setTimeout(() => {
-      setSlides([
-        { id: 1, image: "/assets/images/1.jpg" },
-        { id: 2, image: "/assets/images/2.jpg" },
-        { id: 3, image: "/assets/images/3.jpg" },
-        { id: 4, image: "/assets/images/4.jpg" },
-      ]);
-      setLoading(false);
-    }, 2000);
-  };
-
+  // Fetch person object from API
   useEffect(() => {
-    fetchSlides();
+    const formData = new FormData();
+
+    fetch(apiServer + "WebsiteDetails", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPerson(data);
+
+        try {
+          const parsedHeroList = JSON.parse(data.HeroList || '[]');
+          const formattedSlides = parsedHeroList.map((img, idx) => ({
+            id: idx + 1,
+            image: apiMedia + img,
+          }));
+          setSlides(formattedSlides);
+        } catch (err) {
+          console.error("Error parsing HeroList:", err);
+          setSlides([]);
+        }
+      })
+      .catch((err) => console.error("Error fetching website details:", err));
   }, []);
 
+  // Auto-slide
   useEffect(() => {
-    if (!loading) {
+    if (slides.length > 0) {
       const interval = setInterval(() => {
         setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [loading, current, slides.length]);
+  }, [slides]);
 
   const nextSlide = () => {
     setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -42,16 +54,16 @@ const Hero = () => {
     setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
-  if (loading) {
+  // Show loader if person not yet loaded or no slides
+  if (!person || slides.length === 0) {
     return (
-      <div className="hero-container">
+      <div className="hero-container shimmer hero-skeleton-image1">
         <div className="normal-loader__card hero-loader-skeleton">
-          <div className="shimmer hero-skeleton-image"></div>
+         
         </div>
       </div>
     );
   }
-  
 
   return (
     <div className="hero-container">
@@ -61,12 +73,21 @@ const Hero = () => {
           key={slide.id}
         >
           {index === current && (
-            <img src={slide.image} alt={`Slide ${slide.id}`} className="slide-image" />
+            <img
+              src={slide.image}
+              alt={`Slide ${slide.id}`}
+              className="slide-image"
+             
+            />
           )}
         </div>
       ))}
-      <button className="left-arrow" onClick={prevSlide}>&#10094;</button>
-      <button className="right-arrow" onClick={nextSlide}>&#10095;</button>
+      <button className="left-arrow" onClick={prevSlide}>
+        &#10094;
+      </button>
+      <button className="right-arrow" onClick={nextSlide}>
+        &#10095;
+      </button>
     </div>
   );
 };

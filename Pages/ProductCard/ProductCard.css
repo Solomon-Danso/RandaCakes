@@ -218,12 +218,14 @@
   
   
   
-  .product-image {
+.product-image {
     width: 100%;
+    min-width:255px;
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
   }
+  
   
 
   .product-info {
@@ -448,11 +450,10 @@
   text-align: center;
 }
 .product-row{
- display: flex;
+  display: flex;
   flex-direction: column;
-  gap:0.5rem;
+  justify-content: space-between;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
 }
 
 .quantity-control {

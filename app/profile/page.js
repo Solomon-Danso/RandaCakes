@@ -1,13 +1,15 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./profile.css"
 import Navbar from '@/Pages/Navbar/Navbar'
 import LastFooter from '@/Pages/Footer/LastFooter'
 import Footer from '@/Pages/Footer/Footer'
-import { Accounts, Countries } from '@/Constants/data'
+import { Accounts, apiServer, Countries } from '@/Constants/data'
 import { useRouter } from 'next/navigation'
-import Selector from '@/Constants/Selector'
+import { AES, enc } from 'crypto-js';
 import CountrySelect from '@/Constants/CountrySelect'
+import { Show } from '@/Constants/Alerts'
+
 
 const Page = () => {
 
@@ -19,7 +21,79 @@ const Page = () => {
 
 const current = "/profile"
 const [selectedCountry, setSelectedCountry] = useState(Countries[0]);
-const [phone, setPhone] = useState('');
+
+
+  const [userInfo, setUserInfo] = useState({});
+
+    useEffect(() => {
+    try {
+      const encryptedData = sessionStorage.getItem("userDataEnc");
+      const encryptionKey = '$2a$11$3lkLrAOuSzClGFmbuEAYJeueRET0ujZB2TkY9R/E/7J1Rr2u522CK';
+      const decryptedData = AES.decrypt(encryptedData, encryptionKey);
+      const decryptedString = decryptedData.toString(enc.Utf8);
+      const parsedData = JSON.parse(decryptedString);
+      setUserInfo(parsedData);
+    } catch (error) {
+      Show.Attention("You are not logged in, please login to continue");
+     navigate("/authenticate")    
+    }
+  }, []);
+
+const [fullName, setFullName] = useState('');
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [phoneNumber, setPhoneNumber] = useState('');
+
+  const handleSubmit = async () => {
+  
+
+    try {
+        Show.showLoading("Processing Data.....");
+
+        const postData = new FormData();
+        
+        postData.append("Username", fullName);
+        postData.append("Phone", phoneNumber);
+        postData.append("Email",email);
+        postData.append("Password", password);
+        postData.append("UserId", userInfo.UserId);
+        
+
+        const res = await fetch(apiServer + "UpdateCustomer", {
+          method: "POST",
+          headers: {
+            "UserId": userInfo.UserId,
+            "SessionId": userInfo.SessionId
+          },
+          body: postData,
+        });
+
+        const data = await res.json();
+       
+
+        if (res.ok) {
+           Show.hideLoading();
+
+           Show.Success(data.message);
+
+        } else {
+          Show.Attention(data.message || "Signup failed");
+        }
+      
+
+
+    } catch (err) {
+      console.error(err);
+      Show.Attention("Something went wrong. Try again.");
+    }
+  };
+
+const LogOut = () => {
+    sessionStorage.clear();
+    Show.Success("Logged out successfully");
+    navigate("/");
+  }
+
 
 
   return (
@@ -30,10 +104,10 @@ const [phone, setPhone] = useState('');
 <div className='profile-left'>
 
 <div className='profile-left-1'>
-<div style={{width:"120px", height:"120px", borderRadius:"50%", backgroundColor:"#EC407A", color:"white", textAlign:"center", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", fontSize:"50px", fontWeight:"bold"}}>S</div>
+<div style={{width:"120px", height:"120px", borderRadius:"50%", backgroundColor:"#EC407A", color:"white", textAlign:"center", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", fontSize:"50px", fontWeight:"bold"}}> {userInfo?.FullName?.charAt(0)?.toUpperCase() || ""}</div>
 <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
-    <div style={{fontSize:"1.3rem", fontWeight:"bold"}}>Randa Cakes</div>
-    <div>randacakes@gmail.com</div>
+    <div style={{fontSize:"1.3rem", fontWeight:"bold"}}>{userInfo.FullName}</div>
+    <div>{userInfo.Email}</div>
 </div>
 
 </div>
@@ -78,17 +152,17 @@ const [phone, setPhone] = useState('');
           <input
             className="profile-input"
             type="text"
-            // onChange={(e) => setCountry(e.target.value)}
+            onChange={(e) => setFullName(e.target.value)}
             required
           />
     </fieldset>
 
     <fieldset>
-          <legend>Email *</legend>
+          <legend>Phone Number *</legend>
           <input
             className="profile-input"
             type="text"
-            // onChange={(e) => setCountry(e.target.value)}
+            onChange={(e) => setPhoneNumber(e.target.value)}
             required
           />
     </fieldset>
@@ -97,66 +171,29 @@ const [phone, setPhone] = useState('');
 
    <div className='profile-right-div'>
 
-   <fieldset style={{ marginBottom: "1rem" }}>
-  <legend style={{ fontWeight: "bold", fontSize: "1rem", marginBottom: "0.5rem" }}>Phone Number *</legend>
-  <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
-    <div style={{ flex: 1 }}>
-      <CountrySelect
-        selectedCountry={selectedCountry}
-        setSelectedCountry={setSelectedCountry}
-      />
-    </div>
 
-    <input
-      className="profile-input"
-      type="tel"
-      placeholder="Phone number"
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-      style={{
-        flex: 2,
-        padding: "0.6rem",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        fontSize: "1rem"
-      }}
-      required
-    />
-  </div>
-</fieldset>
 
+    <fieldset>
+          <legend>Password*</legend>
+          <input
+            className="profile-input"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+    </fieldset>
 
 
    </div>
 
-   <div className='profile-right-div'>
 
-<fieldset>
-      <legend>New Password*</legend>
-      <input
-        className="profile-input"
-        type="text"
-        // onChange={(e) => setCountry(e.target.value)}
-        required
-      />
-</fieldset>
 
-<fieldset>
-      <legend>Confirm Password*</legend>
-      <input
-        className="profile-input"
-        type="text"
-        // onChange={(e) => setCountry(e.target.value)}
-        required
-      />
-</fieldset>
+ <div className='profile-right-div'>
+ 
+ <div className="add-to-cart-btn1" style={{width:"150px"}} onClick={()=> handleSubmit()}>Update</div>
+ <div className="add-to-cart-btn1" style={{width:"150px", backgroundColor:"#EC407A"}} onClick={()=> LogOut()}>LogOut</div>
 
-   </div>
-
-   <div className="add-to-cart-btn1" style={{width:"150px"}}>
-     
-      Update
-</div>
+ </div>
 
 
 </div>

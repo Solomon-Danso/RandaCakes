@@ -49,6 +49,27 @@ export const Show = {
       showConfirmButton: false // <-- Hide the "OK" button
     });
   },
+
+   Confirm: function(message,onConfirm, onDelete) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: message+"?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, proceed',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // If user selects 'Yes'
+          onConfirm(); // Execute the passed callback function
+        } else{
+          onDelete(); // Execute the passed callback function
+        } 
+      });
+    }
+
+
+
 };
 
 

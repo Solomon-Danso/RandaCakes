@@ -81,8 +81,9 @@
 }
 
 .logo {
-  height: 40px;
-  object-fit: contain;
+  height: 100px;
+  width:100px;
+  /* object-fit: contain; */
 }
 
 .search{
@@ -349,6 +350,13 @@
 .viewer{
   display: none;
 }
+
+.invisible{
+  display: none;
+}
+
+
+
 
 @media (min-width:1025px) {
   .navbar-long{

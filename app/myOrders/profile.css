@@ -197,20 +197,35 @@ legend {
     display: inline-block;
   }
   
-  .status-badge.delivered {
-    background-color: #4caf50;
-    color: white;
-  }
+
+ .status-badge.processing {
+  background-color: #f57c00; /* Muted deep orange */
+  color: white;
+}
+
+.status-badge.bagged {
+  background-color: #ef0000; /* Slightly deeper orange */
+  color: white;
+}
+
+.status-badge.checked {
+  background-color: #8d6e63; /* Soft brown/gray tone for neutral check */
+  color: white;
+}
+
+.status-badge.assigned {
+  background-color: #1976d2; /* Muted blue */
+  color: white;
+}
+
+.status-badge.delivered {
+  background-color: #388e3c; /* Muted green */
+  color: white;
+}
+
   
-  .status-badge.shipped {
-    background-color: #2196f3;
-    color: white;
-  }
-  
-  .status-badge.processing {
-    background-color: #ff9800;
-    color: white;
-  }
+
+
 
   .order-table td,
   .order-table th {
@@ -228,6 +243,73 @@ legend {
     position: relative;
   }
   
+
+  .modal-overlay1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content1 {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-btn1 {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 3rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+}
+
+.view-btn1 {
+  background-color: #FF5252;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.products1 {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.product-card1 {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.product-card1 img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
 
 
   

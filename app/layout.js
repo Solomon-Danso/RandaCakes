@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Randa Cakes",
-  description: "Cakes for all occasions",
+  title: "UG MALL",
+  description: "Mall for all your needs",
 };
 
 export default function RootLayout({ children }) {

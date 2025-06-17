@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import CryptoJS from 'crypto-js';
 import { Show } from '@/Constants/Alerts';
-import { apiServer, DummyProducts } from '@/Constants/data';
+import { apiServer, apiAInML } from '@/Constants/data';
 
 const secretKey = "NXds7IUykdbiy2sDk7c2LsAuh7lxmiy68wFmRyGttVW3wbj12tGRi2dI185N10NmIO7wIOEut9Dz9KHKaj+Urm8T9LXYceag";
 
@@ -21,80 +21,57 @@ export const useCartStore = create((set, get) => ({
   productList: [],
   categoryList:[],
 
-  // loadCategory: async () => {
-  //   try {
-  //     const response = await fetch(apiServer + "ViewAllCategory", {
-  //       method: "POST"
-  //     });
+  loadCategory: async () => {
+    try {
+      const response = await fetch(apiServer + "ViewAllCategory", {
+        method: "POST"
+      });
 
-  //     const data = await response.json();
+      const data = await response.json();
 
-  //     if (response.ok) {
-  //       set({ categoryList: data });
+      if (response.ok) {
+        set({ categoryList: data });
        
         
-  //     } else {
-  //       console.error("Invalid product response format", data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error loading products:", error);
-  //   }
-  // },
+      } else {
+        console.error("Invalid product response format", data);
+      }
+    } catch (error) {
+      console.error("Error loading products:", error);
+    }
+  },
 
-loadCategory: async () => {},
-loadProducts: async () => {},
+  loadProducts: async () => {
+    try {
+      const response = await fetch(apiServer + "ViewAllProducts", {
+        method: "POST"
+      });
 
-  // loadProducts: async () => {
-  //   try {
-  //     const response = await fetch(apiServer + "ViewAllProducts", {
-  //       method: "POST"
-  //     });
+      const data = await response.json();
 
-  //     const data = await response.json();
-
-  //     if (Array.isArray(data)) {
-  //       set({ productList: data });
-  //     } else {
-  //       console.error("Invalid product response format", data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error loading products:", error);
-  //   }
-  // },
+      if (Array.isArray(data)) {
+        set({ productList: data });
+      } else {
+        console.error("Invalid product response format", data);
+      }
+    } catch (error) {
+      console.error("Error loading products:", error);
+    }
+  },
   
   setSearchTerm: (term) => {
     set({ searchTerm: term });
   },
 
-  // searchedProducts: () => {
-  //   const { searchTerm, productList } = get();
-  //   if (!searchTerm) {
-  //     set({ searchedProductsList: productList });
-  //     return productList;
-  //   }
-  
-  //   const lowerTerm = searchTerm.toLowerCase();
-  //   const searchProducts = productList.filter(product =>
-  //     product.title.toLowerCase().includes(lowerTerm) ||
-  //     product.description?.toLowerCase().includes(lowerTerm) ||
-  //     product.category?.toLowerCase().includes(lowerTerm) ||
-  //     product.subCate?.toLowerCase().includes(lowerTerm)
-  //   );
-  
-  //   set({ searchedProductsList: searchProducts });
-  //   return searchProducts;
-  // },
-
-
   searchedProducts: () => {
     const { searchTerm, productList } = get();
     if (!searchTerm) {
-      set({ searchedProductsList: DummyProducts });
-      return DummyProducts;
+      set({ searchedProductsList: productList });
+      return productList;
     }
   
     const lowerTerm = searchTerm.toLowerCase();
-    const searchProducts = DummyProducts.filter(product =>
+    const searchProducts = productList.filter(product =>
       product.title.toLowerCase().includes(lowerTerm) ||
       product.description?.toLowerCase().includes(lowerTerm) ||
       product.category?.toLowerCase().includes(lowerTerm) ||
@@ -105,16 +82,24 @@ loadProducts: async () => {},
     return searchProducts;
   },
 
-
-
-  forYouProducts: () => {
-    const { productList } = get();
-    const foryouProducts = productList.slice(0,1)
   
-    set({ forYouList: foryouProducts });
-    return foryouProducts;
+   forYouProducts: async () => {
+    try {
+      const response = await fetch(apiAInML + "recommendations/"+localStorage.getItem("BrowserId")+"/", {
+        method: "POST"
+      });
+
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        set({ forYouList: data });
+      } else {
+        console.error("Invalid recommended product response format", data);
+      }
+    } catch (error) {
+      console.error("Error loading products:", error);
+    }
   },
-  
   
 
 
@@ -323,6 +308,10 @@ loadProducts: async () => {},
     return [];
   },
   
+  clearOrder: () => {
+    localStorage.removeItem('orderData');
+    set({ cart: [] });
+  },
 
 
 

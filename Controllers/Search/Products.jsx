@@ -147,8 +147,7 @@ const SearchProducts = () => {
             </div>
           </div>
 
-          {/* RATING FILTER */}
-          
+
         </div>
 
         <div className="cateProducts-Right">
@@ -156,16 +155,7 @@ const SearchProducts = () => {
             <div>
               {filteredProducts.length} {filteredProducts.length === 1 ? "Product" : "Products"} Found
             </div>
-            <div style={{display:"flex", flexDirection:"row", alignItems:"center", gap:"0.5rem"}}>
-              <span>Sort By</span>
-              <select className="sort-select" onChange={handleSortChange} value={sortOption}>
-                <option value="">Default</option>
-                <option value="priceLowHigh">Price: Low to High</option>
-                <option value="priceHighLow">Price: High to Low</option>
-                <option value="ratingHighLow">Rating: High to Low</option>
-                <option value="ratingLowHigh">Rating: Low to High</option>
-              </select>
-            </div>
+            
           </div>
 
           <RowProduct product={filteredProducts} />
@@ -192,7 +182,7 @@ const SearchProducts = () => {
                   <span>Max: GHC{maxPrice.toFixed(2)}</span>
                 </div>
 
-                
+
               </div>
             </div>
           </div>

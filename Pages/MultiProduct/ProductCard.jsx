@@ -7,7 +7,7 @@ import { CgMaximizeAlt } from "react-icons/cg";
 import { PiRepeatOnceBold } from "react-icons/pi";
 import { useRouter } from 'next/navigation'
 import CryptoJS from 'crypto-js';
-import { apiMedia, DummyProducts } from '@/Constants/data'
+import { apiAInML, apiMedia, DummyProducts } from '@/Constants/data'
 import { Show } from '@/Constants/Alerts'
 import { useCartStore } from '@/Components/CartStore'
 
@@ -20,6 +20,8 @@ const ProductCard = ({ product }) => {
   const [modalContent, setModalContent] = useState(null);
   const [activeImage, setActiveImage] = useState(null);
   const [imageSrc, setImageSrc] = useState({});
+  const [selectedSize, setSelectedSize] = useState(null);
+  
   
   const magnifierRef = useRef(null);
   const mainImageRef = useRef(null);
@@ -63,40 +65,7 @@ const ProductCard = ({ product }) => {
     setModalContent(null);
   };
 
-  // Magnifier functions
-  const handleMouseMove = (e) => {
-    const magnifier = magnifierRef.current;
-    const image = mainImageRef.current;
-  
-    const rect = image.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-  
-    // Size of the magnifier
-    const magnifierSize = 150;
-    const zoom = 2;
-  
-    // Position magnifier div
-    magnifier.style.left = `${x - magnifierSize / 2}px`;
-    magnifier.style.top = `${y - magnifierSize / 2}px`;
-  
-    // Set background image to image src
-    magnifier.style.backgroundImage = `url(${image.src})`;
-    magnifier.style.backgroundRepeat = 'no-repeat';
-    magnifier.style.backgroundSize = `${image.width * zoom}px ${image.height * zoom}px`;
-  
-    // Set background position based on mouse
-    const bgX = (x / rect.width) * 100;
-    const bgY = (y / rect.height) * 100;
-    magnifier.style.backgroundPosition = `${bgX}% ${bgY}%`;
-  
-    magnifier.style.display = 'block';
-  };
-  
-
-  const handleMouseLeaveMagnifier = () => {
-    magnifierRef.current.style.display = 'none';
-  };
+ 
 
   // Format price
   const formatCurrency = (value) => {
@@ -125,19 +94,24 @@ const ProductCard = ({ product }) => {
     loadWishlist()
   }, []);
 
-  const handleInteractions= async (iUserId, iProductId, iProductCate) => {
+ const handleInteractions= async (userData) => {
 
+   
       try {
     
    
     const userProductTracker = {
-      "user_id":iUserId,
-      "product_id": iProductId,
-      "product_category": iProductCate
+      "productId":userData.productId,
+      "title": userData.title,
+      "price": userData.price,
+      "description": userData.discountPercent>1?"discount":userData.description,
+      "browserId": localStorage.getItem("BrowserId"),
     }
+
     
     
-    const response = await fetch("http://127.0.0.1:8000/interactions", {
+    
+    const response = await fetch(apiAInML+"click/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -145,19 +119,7 @@ const ProductCard = ({ product }) => {
       body: JSON.stringify(userProductTracker),
     });
     
-        const data = await response.json();
-     
-    
-        if (response.ok) {
-          
-          Show.hideLoading();
-    
-          Show.Success(data.message);
-   
-          
-        } else {
-          Show.Attention(data.message);
-        }
+        
       } catch (error) {
     
       
@@ -179,19 +141,19 @@ const ProductCard = ({ product }) => {
             <div className='product-card' key={index}>
               <div className='image-container'>
                 <img
-                  src={currentImage}
+                  src={apiMedia+currentImage}
                   alt={item.title}
                   className='product-image'
                   onMouseEnter={() => handleMouseEnter(index, item.secondPicture)}
                   onMouseLeave={() => handleMouseLeave(index, item.mainPicture)}
                   onClick={() => {
-                    handleInteractions("localhost2",item.productId,item.category )
+                    handleInteractions(item )
                     navigate(`/productDetails?productId=${item.productId}`)}}
                 />
                 
                 <div className='discount-badge'>-{item.discountPercent}%</div>
 
-               
+
               </div>
 
               <div className='product-info'>
@@ -206,6 +168,7 @@ const ProductCard = ({ product }) => {
 {
   item.discountPercent<1?<>
   <div style={{color:"#ff5252", fontFamily:"Hydot-SemiBold", fontSize:"16px",}}> {formatCurrency(item.price)} </div>
+  
   </>:<>
   <div style={{color:"#6b7280", fontFamily:"Hydot-SemiBold", fontSize:"16px",textDecoration: "line-through" }}> {formatCurrency(item.price)} </div>
   <div style={{color:"#ff5252", fontFamily:"Hydot-SemiBold", fontSize:"16px",}}> {formatCurrency(((100-item.discountPercent)/100)*item.price)} </div>
@@ -261,7 +224,7 @@ const ProductCard = ({ product }) => {
               {(modalContent.subPictures || []).map((subImage, subIndex) => (
                 <img
                   key={subIndex}
-                  src={subImage}
+                  src={apiMedia+subImage}
                   alt={`Sub ${subIndex}`}
                   className="sub-image-item"
                   onMouseEnter={() => setActiveImage(subImage)}
@@ -272,12 +235,11 @@ const ProductCard = ({ product }) => {
 
               <div className="magnifier-container">
                 <img
-                  src={activeImage}
+                  src={apiMedia+activeImage}
                   alt="Main"
                   className="modal-image"
                   ref={mainImageRef}
-                  onMouseMove={handleMouseMove}
-                  onMouseLeave={handleMouseLeaveMagnifier}
+                 
                 />
                 <div className="magnifier-glass" ref={magnifierRef}></div>
               </div>
@@ -387,25 +349,7 @@ const ProductCard = ({ product }) => {
               </div>
 
 
-              <div className="modal-right-row">
-
-                <div className="modal-right-row2">
-                {wishlist.find(cartItem => cartItem.productId === modalContent.productId)?
-                  <FaHeart className='p-icon' style={{ width: "30px", height: "30px", color:"red" }} onClick={() => deleteFromWishlist(modalContent.productId)}/>:
-                  <FiHeart className='p-icon' style={{ width: "30px", height: "30px" }} onClick={() => addToWishList(modalContent, 1)}/>
-                  
-                  }
-                <span>Add to Wishlist</span>
-                </div>
              
-                <div className="modal-right-row2">
-                <PiRepeatOnceBold className='p-icon' style={{ width: "30px", height: "30px" }} />
-                <span>Add to Compare</span>
-                </div>
-
-            
-
-              </div>
              
                 
              
