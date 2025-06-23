@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "UG MALL",
+  title: "Randa Cakes",
   description: "Mall for all your needs",
 };
 
