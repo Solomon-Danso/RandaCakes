@@ -1,5 +1,5 @@
-export const apiServer = "https://ugmallapi.hydottech.com/api/";
-export const apiMedia = "https://ugmallapi.hydottech.com/"; //Live 
+export const apiServer = "https://democommerceapi.hydottech.com/api/";
+export const apiMedia = "https://democommerceapi.hydottech.com/"; //Live 
 export const apiAInML = "https://ainmlserverapi.hydottech.com/"
  
 
