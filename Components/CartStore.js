@@ -1,17 +1,11 @@
 import { create } from 'zustand';
 import CryptoJS from 'crypto-js';
 import { Show } from '@/Constants/Alerts';
-import { apiServer, apiAInML } from '@/Constants/data';
+import { DummyProducts } from '@/Constants/data';
 
-const secretKey = "NXds7IUykdbiy2sDk7c2LsAuh7lxmiy68wFmRyGttVW3wbj12tGRi2dI185N10NmIO7wIOEut9Dz9KHKaj+Urm8T9LXYceag";
-
-
+const secretKey = "NXds7IUykdbiy2sDk7c2LsAuh";
 
 export const useCartStore = create((set, get) => ({
-
-
-
-
   cart: [],
   wishlist:[],
   searchTerm: '',
@@ -21,39 +15,48 @@ export const useCartStore = create((set, get) => ({
   productList: [],
   categoryList:[],
 
-  loadCategory: async () => {
-    try {
-      const response = await fetch(apiServer + "ViewAllCategory", {
-        method: "POST"
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        set({ categoryList: data });
-       
-        
-      } else {
-        console.error("Invalid product response format", data);
+loadCategory: async () => {
+  try {
+    // Extract unique categories from DummyProducts
+    const categories = DummyProducts.reduce((acc, product) => {
+      if (product.category && !acc.some(cat => cat.name === product.category)) {
+        acc.push({
+          id: acc.length + 1, // Generate incremental ID
+          name: product.category,
+          // Optional: include subcategories if needed
+          subcategories: product.subCate ? [product.subCate] : []
+        });
       }
-    } catch (error) {
-      console.error("Error loading products:", error);
-    }
-  },
+      return acc;
+    }, []);
+
+    // If you want to include subcategories more comprehensively:
+    const categoriesWithSubs = DummyProducts.reduce((acc, product) => {
+      // Find or create the main category
+      let category = acc.find(cat => cat.name === product.category);
+      if (!category && product.category) {
+        category = { id: acc.length + 1, name: product.category, subcategories: [] };
+        acc.push(category);
+      }
+      
+      // Add subcategory if it exists and isn't already included
+      if (product.subCate && category && !category.subcategories.includes(product.subCate)) {
+        category.subcategories.push(product.subCate);
+      }
+      
+      return acc;
+    }, []);
+
+    set({ categoryList: categoriesWithSubs }); // or categories if you prefer simpler version
+  } catch (error) {
+    console.error("Error loading categories:", error);
+  }
+},
 
   loadProducts: async () => {
     try {
-      const response = await fetch(apiServer + "ViewAllProducts", {
-        method: "POST"
-      });
-
-      const data = await response.json();
-
-      if (Array.isArray(data)) {
-        set({ productList: data });
-      } else {
-        console.error("Invalid product response format", data);
-      }
+      // Using DummyProducts instead of API call
+      set({ productList: DummyProducts });
     } catch (error) {
       console.error("Error loading products:", error);
     }
@@ -82,26 +85,15 @@ export const useCartStore = create((set, get) => ({
     return searchProducts;
   },
 
-  
-   forYouProducts: async () => {
+  forYouProducts: async () => {
     try {
-      const response = await fetch(apiAInML + "recommendations/"+localStorage.getItem("BrowserId")+"/", {
-        method: "POST"
-      });
-
-      const data = await response.json();
-
-      if (Array.isArray(data)) {
-        set({ forYouList: data });
-      } else {
-        console.error("Invalid recommended product response format", data);
-      }
+      // Using a subset of DummyProducts for recommendations
+      const recommendedProducts = DummyProducts.slice(0, 5); // Get first 5 products as recommendations
+      set({ forYouList: recommendedProducts });
     } catch (error) {
-      console.error("Error loading products:", error);
+      console.error("Error loading recommended products:", error);
     }
   },
-  
-
 
   saveCart: (cartData) => {
     const encrypted = CryptoJS.AES.encrypt(JSON.stringify(cartData), secretKey).toString();
@@ -193,7 +185,7 @@ export const useCartStore = create((set, get) => ({
   },
 
   updateCartQuantity: (item, change) => {
-    const { cart, saveCart,productList } = get();
+    const { cart, saveCart, productList } = get();
 
     const product = productList.find(p => p.productId === item.productId);
     const stockAvailable = product ? product.quantity : item.quantity;
@@ -268,8 +260,9 @@ export const useCartStore = create((set, get) => ({
     saveWishlist(updatedCart);
     loadWishlist();
   },
+  
   deleteFromWishlist: (productId) => {
-    const { wishlist, saveWishlist, } = get();
+    const { wishlist, saveWishlist } = get();
     const updatedCart = wishlist.filter(item => item.productId !== productId);
     set({ wishlist: updatedCart });
     saveWishlist(updatedCart);
@@ -280,7 +273,6 @@ export const useCartStore = create((set, get) => ({
   
     if (!cart || cart.length === 0) {
       Show.Error("No items in cart to process.");
-
       return;
     }
   
@@ -297,7 +289,7 @@ export const useCartStore = create((set, get) => ({
       try {
         const bytes = CryptoJS.AES.decrypt(encryptedOrder, secretKey);
         const decryptedOrder = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-        set({ theOrder: decryptedOrder }); // <-- update the store
+        set({ theOrder: decryptedOrder });
         return decryptedOrder;
       } catch (e) {
         Show.Error("An error has occurred");
@@ -312,8 +304,4 @@ export const useCartStore = create((set, get) => ({
     localStorage.removeItem('orderData');
     set({ cart: [] });
   },
-
-
-
-
 }));

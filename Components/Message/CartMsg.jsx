@@ -47,28 +47,15 @@ const CartMsg = ({ mobileOpen, toggler = () => {} }) => {
 
     const LoginNotRequired = () => {
       processTheOrder();
-      navigate("/checkout")
+      navigate("/")
     }
 
      const LoginRequired = () => {
       processTheOrder();
-      navigate("/checkoutauth")
+      navigate("/")
     }
 
-    const Checkout = () => {
-  if (!userInfo?.Email) {
-    Show.Confirm(
-      "Would you like to Log in for a faster order tracking",
-      LoginRequired,    // ✅ Pass function, do not call it
-      LoginNotRequired  // ✅ Pass function, do not call it
-    );
-  } else {
-    // User is already logged in
-    processTheOrder();
-    navigate("/checkout");
-  }
-  
-};
+   
 
 
 
@@ -140,7 +127,7 @@ const CartMsg = ({ mobileOpen, toggler = () => {} }) => {
  <div style={{marginTop:"1rem", display:"flex", justifyContent:"space-between", alignItems:"center", flexDirection:"row", padding:"0.5rem 1rem"}}>
 
 
-<div className="add-to-cart-btn1" style={{width:"150px"}} onClick={()=>{Checkout()}}>
+<div className="add-to-cart-btn1" style={{width:"150px"}} >
      
       Checkout
 </div>

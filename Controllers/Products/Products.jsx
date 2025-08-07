@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import './Products.css';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/Pages/Navbar/Navbar';
-import Footer from '@/Pages/Footer/Footer';
-import LastFooter from '@/Pages/Footer/LastFooter';
+;
+
 import { Categories, DummyProducts } from '@/Constants/data';
 import RowProduct from '@/Pages/ProductCard/RowProducts';
 import { FaFilter, FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
@@ -267,8 +267,8 @@ const toggleFilterModal = () => {
 
       </div>
 
-      <Footer />
-      <LastFooter />
+
+      
     </div>
   );
 };

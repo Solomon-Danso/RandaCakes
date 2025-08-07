@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import "./profile.css"
 import Navbar from '@/Pages/Navbar/Navbar'
-import LastFooter from '@/Pages/Footer/LastFooter'
-import Footer from '@/Pages/Footer/Footer'
+
+
 import { Accounts, apiMedia, apiServer, Countries } from '@/Constants/data'
 import { useRouter } from 'next/navigation'
 import { FaStar, FaStarHalfAlt, FaRegStar, FaHeart } from 'react-icons/fa'
@@ -34,7 +34,7 @@ const [userInfo, setUserInfo] = useState({});
       setUserInfo(parsedData);
     } catch (error) {
      Show.Attention("You are not logged in, please login to continue");
-     navigate("/authenticate")    
+     navigate("/")    
     }
   }, []);
 
@@ -316,8 +316,8 @@ const renderStars = (productId, orderId) => {
 
 </div>
 
-<LastFooter/>
-<Footer/>
+
+
 
     </div>
     

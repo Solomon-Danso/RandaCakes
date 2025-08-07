@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import "./profile.css"
 import Navbar from '@/Pages/Navbar/Navbar'
-import LastFooter from '@/Pages/Footer/LastFooter'
-import Footer from '@/Pages/Footer/Footer'
+
+
 import { Accounts, apiServer, Countries } from '@/Constants/data'
 import { useRouter } from 'next/navigation'
 import { AES, enc } from 'crypto-js';
@@ -35,7 +35,7 @@ const [selectedCountry, setSelectedCountry] = useState(Countries[0]);
       setUserInfo(parsedData);
     } catch (error) {
       Show.Attention("You are not logged in, please login to continue");
-     navigate("/authenticate")    
+     navigate("/")    
     }
   }, []);
 
@@ -201,8 +201,8 @@ const LogOut = () => {
 
 </div>
 
-<LastFooter/>
-<Footer/>
+
+
 
     </div>
     

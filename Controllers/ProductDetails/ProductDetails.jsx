@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Products.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/Pages/Navbar/Navbar';
-import Footer from '@/Pages/Footer/Footer';
-import LastFooter from '@/Pages/Footer/LastFooter';
+;
+
 import { FaHeart, FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { PiRepeatOnceBold } from 'react-icons/pi';
@@ -203,7 +203,7 @@ const ProductDetails = () => {
             ) : (
               <div className="add-to-cart-btn1" onClick={() => addToCartWithSize(modalContent, 1, selectedSize)}>
                 <FiShoppingCart style={{ marginRight: '8px' }} />
-                Add to Cart
+                Add Basket
               </div>
             )}
           </div>
@@ -212,8 +212,8 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <Footer />
-      <LastFooter />
+
+      
     </div>
   );
 };

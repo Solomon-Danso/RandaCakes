@@ -141,9 +141,7 @@ const ProductCard = ({ product }) => {
                   src={apiMedia+currentImage}
                   alt={item.title}
                   className='product-image'
-                  onMouseEnter={() => handleMouseEnter(index, item.secondPicture)}
-                  onMouseLeave={() => handleMouseLeave(index, item.mainPicture)}
-                  onClick={() => {
+                                   onClick={() => {
                     handleInteractions(item )
                     navigate(`/productDetails?productId=${item.productId}`)}}
                 />
@@ -199,7 +197,7 @@ const ProductCard = ({ product }) => {
 ) : (
   <div className="add-to-cart-btn" onClick={() => addToCart(item, 1)}>
     <FiShoppingCart style={{ marginRight: '8px' }} />
-    Add to Cart
+    Add Basket
   </div>
 )}
 
@@ -252,7 +250,7 @@ const ProductCard = ({ product }) => {
                   <span style={{color:"#9ca3af"}}>Category : </span>
                   <span style={{textDecoration:"capitalize"}}>{modalContent.category}</span>
 
-                <span className='modal-product-rating'>{renderStars(modalContent.starRating)}</span>
+              
 
                 <span>Review (3)</span>
 
@@ -267,8 +265,7 @@ const ProductCard = ({ product }) => {
   <div style={{color:"#ff5252", fontFamily:"Hydot-SemiBold", fontSize:"20px",}}> {formatCurrency(modalContent.price)} </div>
 
   </>:<>
-  <div style={{color:"#6b7280", fontFamily:"Hydot-SemiBold", fontSize:"20px",textDecoration: "line-through" }}> {formatCurrency(modalContent.price)} </div>
-  <div style={{color:"#ff5252", fontFamily:"Hydot-SemiBold", fontSize:"20px",}}> {formatCurrency(((100-modalContent.discountPercent)/100)*modalContent.price)} </div>
+    <div style={{color:"#ff5252", fontFamily:"Hydot-SemiBold", fontSize:"20px",}}> {formatCurrency(((100-modalContent.discountPercent)/100)*modalContent.price)} </div>
 
   </>
 }
@@ -339,7 +336,7 @@ const ProductCard = ({ product }) => {
 ) : (
   <div className="modal-add-to-cart-btn" onClick={() => addToCart(modalContent, 1)}>
     <FiShoppingCart style={{ marginRight: '8px' }} />
-    Add to Cart
+    Add Basket
   </div>
 )}
               </div>

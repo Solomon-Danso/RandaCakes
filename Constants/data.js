@@ -1,17 +1,13 @@
-export const apiServer = "https://democommerceapi.hydottech.com/api/";
-export const apiMedia = "https://democommerceapi.hydottech.com/"; //Live 
-export const apiAInML = "https://ainmlserverapi.hydottech.com/"
+export const apiServer = "";
+export const apiMedia = ""; //Live 
+export const apiAInML = ""
  
 
-//  export const apiServer = "http://localhost:8000/api/";
-//  export const apiMedia = "http://localhost:8000/"; //Live 
-//  export const apiAInML = "http://localhost:9001/"
+
 
 
 const isLocalhost = typeof window !== "undefined" && window.location.hostname != "localhost";
-export const ShortName = isLocalhost 
-? "HydotFMS"
-: "hydottec_FMS";
+export const ShortName = ""
 
 import Hb1 from "@/public/assets/images/hb-1.png"
 import Hb2 from "@/public/assets/images/hb-2.png"

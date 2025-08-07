@@ -6,9 +6,7 @@ import Navbar from '@/Pages/Navbar/Navbar'
 
 import { apiServer, Categories } from '@/Constants/data'
 import MultiProduct from '@/Pages/MultiProduct/MultiProduct'
-import FooterBanner from '@/Pages/FooterBanner/FooterBanner'
-import Footer from '@/Pages/Footer/Footer'
-import LastFooter from '@/Pages/Footer/LastFooter'
+
 import { useCartStore } from '@/Components/CartStore'
 
 
@@ -88,9 +86,8 @@ const { loadProducts, productList, loadCategory, categoryList } = useCartStore()
 
 
 
-<FooterBanner/>
-<Footer/>
-<LastFooter/>
+
+
 
 
     </div>
